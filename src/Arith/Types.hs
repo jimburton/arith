@@ -1,5 +1,10 @@
-module Arith.Types
+{-|
+Module:    Arith.Types
 
+The types for the abstract syntax tree etc.
+-}
+module Arith.Types ( Exp(..)
+                   , Env )
   where
 
 data Exp = Val Int
