@@ -2,6 +2,17 @@
 Module:   Main
 
 Entry point for the arith package
+
+Run it from cabal like this:
+
+arith$ cabal run arith -- "2+2"
+4
+
+or if you want to use identifiers, supply an enironment to look them up in:
+
+arith$ cabal run arith -- "2+x" "[(\"x\",2)]"
+4
+
 -}
 module Main where
 
