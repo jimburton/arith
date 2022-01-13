@@ -22,31 +22,32 @@ import Arith.Types
 whitespace :: Parser ()
 whitespace = void $ many $ oneOf " \n\t"
 
--- |Run a parse then through away whitespace up to the next token
+-- |Run a parse then throw away whitespace up to the next token
 lexeme :: Parser a -> Parser a
 lexeme p = do
            x <- p
            whitespace
-           return x
+           pure x
 
 -- |Parse balanced parentheses
+parseParen :: Parser Exp
 parseParen = do
   void $ lexeme $ char '('
   e <- parseExp
   void $ lexeme $ char ')'
-  return e
+  pure e
 
 -- |Parse a number
 parseVal :: Parser Exp
 parseVal = do
   i <- many1 digit
-  return (Val $ read i)
+  pure (Val $ read i)
 
 -- |Parse an identifier
 parseId :: Parser Exp
 parseId = do
   str <- many1 letter
-  return (Id str)
+  pure (Id str)
 
 -- |Parse a term
 parseTerm :: Parser Exp
@@ -59,7 +60,7 @@ parseTerm = do
           case op of
             '*' -> loop (Mult f1 f2)
             '/' -> loop (Div f1 f2)
-        loop t = factorSuffix t <|> return t
+        loop t = factorSuffix t <|> pure t
 
 -- |Parse a factor
 parseFactor :: Parser Exp
@@ -76,4 +77,4 @@ parseExp = do
           case op of
             '+' -> loop (Plus t1 t2)
             '-' -> loop (Minus t1 t2)
-        loop t = termSuffix t <|> return t
+        loop t = termSuffix t <|> pure t
