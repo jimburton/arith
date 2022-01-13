@@ -24,36 +24,24 @@ whitespace = void $ many $ oneOf " \n\t"
 
 -- |Run a parse then throw away whitespace up to the next token
 lexeme :: Parser a -> Parser a
-lexeme p = do
-           x <- p
-           whitespace
-           pure x
+lexeme p = p >>= \x -> whitespace >> pure x
 
 -- |Parse balanced parentheses
 parseParen :: Parser Exp
-parseParen = do
-  void $ lexeme $ char '('
-  e <- parseExp
-  void $ lexeme $ char ')'
-  pure e
+parseParen = lexeme $ char '(' >> parseExp
+             >>= \e -> lexeme $ char ')' >> pure e
 
 -- |Parse a number
 parseVal :: Parser Exp
-parseVal = do
-  i <- many1 digit
-  pure (Val $ read i)
+parseVal = Val . read <$> many1 digit
 
 -- |Parse an identifier
 parseId :: Parser Exp
-parseId = do
-  str <- many1 letter
-  pure (Id str)
+parseId = Id <$> many1 letter
 
 -- |Parse a term
 parseTerm :: Parser Exp
-parseTerm = do
-  f1 <- parseFactor
-  loop f1
+parseTerm = parseFactor >>= loop
   where factorSuffix f1 = do
           op <- lexeme $ oneOf "*/"
           f2 <- parseFactor
@@ -64,13 +52,11 @@ parseTerm = do
 
 -- |Parse a factor
 parseFactor :: Parser Exp
-parseFactor = parseVal <|> parseParen <|> parseId
+parseFactor = parseVal <|> parseId <|> parseParen
 
 -- |Parse an expression
 parseExp :: Parser Exp
-parseExp = do
-  t1 <- parseTerm
-  loop t1
+parseExp = parseTerm >>= loop
   where termSuffix t1 = do
           op <- lexeme $ oneOf "+-"
           t2 <- parseTerm

@@ -30,13 +30,15 @@ usage = "enter an arithmetic expression in quotes followed by an optional enviro
         
 main :: IO ()
 main = do args <- getArgs
-          if length args == 0
+          if null args
             then putStrLn usage
             else case parse parseExp "arithmetic" (head args) of
-                   Left e -> print e
-                   Right x -> do let env = if length args > 1 then (read (head (drop 1 args))) else []
+                   Left e  -> print e
+                   Right x -> do let env = if length args > 1
+                                           then read (args !! 1)
+                                           else []
                                  case eval x env of
-                                   Nothing -> putStrLn "error"
+                                   Nothing  -> putStrLn "error"
                                    (Just i) -> print i
 
                           
