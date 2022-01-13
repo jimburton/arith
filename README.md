@@ -29,4 +29,7 @@ building parsers with combinators, we start with tiny parsers capable
 of, for instance, parsing a single character or the repetition of a
 character, then combine these in various ways to produce more
 sophisticated parsers. Parsec provides atomic parsers like `digit` and
-`letter`, then ways of repeating and combining them, like `many` and `(<|>)`. 
+`letter`, then ways of repeating and combining them, like `many`
+(takes a parser and applies it zero to many times) and `(<|>)` (takes
+two parsers and tries the first one then, if the first one fails, tries
+the second one).
