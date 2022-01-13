@@ -1,12 +1,13 @@
 # arith
 
 A simple demo of building a parser with combinators. The parser consumes
-and evaluates arithmetic expressions, for example:
+and evaluates arithmetic expressions. If you enter a badly formed expression
+it will tell you what went wrong. For example:
 
 ```
-$ arith "2+(4/(5-4))"
+$ cabal run arith "2+(4/(5-4))"
 6
-$ arith "2+(4/(5-4)"
+$ cabal run arith "2+(4/(5-4)"
 "arithmetic" (line 1, column 11):
 unexpected end of input
 expecting ")"
@@ -16,7 +17,7 @@ You can also supply an *environment* or lookup table of identifiers and the
 values assigned to them:
 
 ```
-$ arith "2+(4/(5-4))+foo-x" "[(\"foo\",1),(\"x\",9)]"
+$ cabal run arith "2+(4/(5-4))+foo-x" "[(\"foo\",1),(\"x\",9)]"
 -2
 ```
 
