@@ -61,10 +61,10 @@ parseId :: Parser Exp
 parseId = Id <$> many1 letter
 ```
 
-Note that `parseId` is using applicative style to "lift" the `Id`
-constructor, which takes a `String`, into the `Parser` context then
-tries to run the parser `many1 letter` to produce a `String`. You could
-equally well write it with do-notation like so:
+Note that `parseId` is using applicative style. It tries to run the
+parser `many1 letter` then supplies the result to the `Id`
+constructor, which is "lifted" into the `Parser` context using
+`(<$>)`. You could equally well write it with do-notation like so:
 
 ```haskell
 parseId = do str <- many1 letter
